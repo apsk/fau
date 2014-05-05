@@ -12,7 +12,7 @@ type Stepper i = i -> Maybe i
 type ContextAwareMapper i a b =
   (i -> Maybe b) -> i -> a -> b
 
-dpMap :: (Show i, Ix i, IArray ar a) => ContextAwareMapper i a b -> Stepper i -> i -> ar i a -> Array i b
+dpMap :: (Ix i, IArray ar a) => ContextAwareMapper i a b -> Stepper i -> i -> ar i a -> Array i b
 dpMap mapper stepper ix arr = io $ do
   let (bmin, bmax) = bounds arr
   buff <- mkIOArray (bmin, bmax) Nothing
@@ -38,8 +38,8 @@ dpMapMxRD mapper arr = dpMap mapper' stepper (1, 1) arr
         | r < 1 || c < 1 = Nothing
         | otherwise = stdLookup (r, c)
     stepper (i, j)
-      | i < rows  = Just (i+1, j)
-      | j < cols  = Just (1, j+1)
+      | j < cols  = Just (i, j+1)
+      | i < rows  = Just (i+1, 1)
       | otherwise = Nothing
 
 {- No idea how to make this with ST even in unsafe way:
