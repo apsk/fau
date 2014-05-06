@@ -14,6 +14,25 @@ io = unsafePerformIO
 dbg :: Show a => a -> b -> b
 dbg = traceShow
 
+bit :: Integral a => Bool -> a
+bit True  = 1
+bit False = 0
+
+divides :: Integral a => a -> a -> Bool
+divides d x = x `mod` d == 0
+
+(x, y) .- z = (x - z, y)
+(x, y) -. z = (x, y - z)
+(x, y) .+ z = (x + z, y)
+(x, y) +. z = (x, y + z)
+(x, y) .* z = (x * z, y)
+(x, y) *. z = (x, y * z)
+(x, y) ./ z = (x / z, y)
+(x, y) /. z = (x, y / z)
+
+bi :: (a -> b) -> (a, a) -> (b, b)
+bi f (a, b) = (f a, f b)
+
 trailingZeros :: Integral a => a -> Int
 trailingZeros = length . takeWhile (\x -> x /= 0 && x `mod` 10 == 0) . iterate (`div` 10)
 
@@ -35,3 +54,6 @@ minByManyOn estimators selector a b = walk estimators
 
 mapFst :: (a -> c) -> (a, b) -> (c, b)
 mapFst f (a, b) = (f a, b)
+
+mapSnd :: (b -> c) -> (a, b) -> (a, c)
+mapSnd f (a, b) = (a, f b)
