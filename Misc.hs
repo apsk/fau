@@ -18,8 +18,14 @@ bit :: Integral a => Bool -> a
 bit True  = 1
 bit False = 0
 
+toi :: Integral a => a -> Integer
+toi = toInteger
+
 divides :: Integral a => a -> a -> Bool
 divides d x = x `mod` d == 0
+
+timesDivisibleBy :: Integral a => a -> a -> Int
+timesDivisibleBy d = length . takeWhile (\r -> r `mod` d == 0) . iterate (`div` d)
 
 (x, y) .- z = (x - z, y)
 (x, y) -. z = (x, y - z)
@@ -32,9 +38,6 @@ divides d x = x `mod` d == 0
 
 bi :: (a -> b) -> (a, a) -> (b, b)
 bi f (a, b) = (f a, f b)
-
-trailingZeros :: Integral a => a -> Int
-trailingZeros = length . takeWhile (\x -> x /= 0 && x `mod` 10 == 0) . iterate (`div` 10)
 
 minBy :: Ord b => (a -> b) -> a -> a -> a
 minBy f a b
