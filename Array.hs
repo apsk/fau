@@ -1,16 +1,33 @@
-module Array where
+{-# LANGUAGE ConstraintKinds, FlexibleContexts #-}
 
-import Data.Array.IArray
+module Array (
+  IOUArrayElem,
+  IArray,
+  MArray,
+  Array,
+  UArray,
+  mkIOArray,
+  mkIOUArray,
+  mxReadIOU,
+  mxReadU
+) where
+
 import Data.Array.IO
+import Data.Array.Unboxed hiding (bounds)
 import Data.Array.Unsafe
 
 import Control.Monad
 
+type IOUArrayElem e = MArray IOUArray e IO
+
 mkIOArray :: Ix i => (i, i) -> e -> IO (IOArray i e)
 mkIOArray = newArray
 
-mxReadM :: Read e => Int -> Int -> IO (IOArray (Int, Int) e)
-mxReadM rows cols = do
+mkIOUArray :: (Ix i, IOUArrayElem e) => (i, i) -> e -> IO (IOUArray i e)
+mkIOUArray = newArray
+
+mxReadIOU :: (Read e, IOUArrayElem e) => Int -> Int -> IO (IOUArray (Int, Int) e)
+mxReadIOU rows cols = do
   mx <- newArray_ ((1, 1), (rows, cols))
   forM_ [1..rows] $ \i -> do
     line <- getLine
@@ -19,5 +36,5 @@ mxReadM rows cols = do
       writeArray mx (i, j) e
   return mx
 
-mxRead :: (IArray a e, Read e) => Int -> Int -> IO (a (Int, Int) e)
-mxRead rows cols = mxReadM rows cols >>= unsafeFreeze
+mxReadU :: (Read e, IArray UArray e, IOUArrayElem e) => Int -> Int -> IO (UArray (Int, Int) e)
+mxReadU rows cols = mxReadIOU rows cols >>= unsafeFreeze
