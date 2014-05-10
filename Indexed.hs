@@ -33,22 +33,22 @@ instance Indexed [e] Int e where
   assocs xs = zip [0..] xs
   bounds xs = (0, length xs - 1)
 
-instance BoundIx i => Indexed (Array i e) i e where
+instance Ix i => Indexed (Array i e) i e where
   a ! ix = a IA.! ix
   bounds = IA.bounds
   assocs = IA.assocs
 
-instance (BoundIx i, IArray UArray e) => Indexed (UArray i e) i e where
+instance (Ix i, IArray UArray e) => Indexed (UArray i e) i e where
   a ! ix = a IA.! ix
   bounds = IA.bounds
   assocs = IA.assocs
 
-instance BoundIx i => Indexed (IOArray i e) i e where
+instance Ix i => Indexed (IOArray i e) i e where
   a ! ix = io $ MA.readArray a ix
   bounds = io . MA.getBounds
   assocs = io . MA.getAssocs
 
-instance (BoundIx i, MArray IOUArray e IO) => Indexed (IOUArray i e) i e where
+instance (Ix i, MArray IOUArray e IO) => Indexed (IOUArray i e) i e where
   a ! ix = io $ MA.readArray a ix
   bounds = io . MA.getBounds
   assocs = io . MA.getAssocs
