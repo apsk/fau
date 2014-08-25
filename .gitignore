@@ -2,3 +2,7 @@
 .cabal-sandbox/
 cabal.sandbox.config
 *#*
+Debug/
+Release
+*.vcxproj
+*.vcxproj.filters
