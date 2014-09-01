@@ -57,7 +57,7 @@ pair<uint, string> min_powers_path(vector<uint>& inputs, int n, int x) {
     return make_pair(counts[n*n - 1], path);
 }
 
-void _main() {
+void cf_2b_main() {
     int z_i = -1;
     int n;
     cin >> n;

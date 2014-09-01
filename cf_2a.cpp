@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int main() {
+int cf_2a_main() {
     int n;
     cin >> n;
     vector<pair<string, int>> entries(n);
@@ -29,4 +29,5 @@ int main() {
         cout << kv.first;
         return 0;
     }
+    return 0;
 }
